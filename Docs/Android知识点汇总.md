@@ -1667,7 +1667,11 @@ ContextWrapper是代理Context的实现，简单地将其所有调用委托给�
 Application、Activity、Service通过``attach() ``调用父类ContextWrapper的``attachBaseContext()``, 从而设置父类成员变量 mBase 为 ContextImpl 对象, ContextWrapper 的核心工作都是交给 mBase(ContextImpl) 来完成，这样可以子类化 Context 以修改行为而无需更改原始 Context。
 
 # SharedPreferences
-SharedPreferences 采用key-value（键值对）形式, 主要用于轻量级的数据存储, 尤其适合保存应用的配置参数, 但不建议使用 SharedPreferences 来存储大规模的数据, 可能会降低性能.
+SharedPreferences 采用key-value（键值对）形式, 主要用于轻量级的数据存储, 尤其适合保存应用的配置参数, 但不建议使用 SharedPreferences 来存储大规模的数据, 可能会降低性能. 为什么降低性能？
+1. 存储效率：SharedPreferences 存储数据的方式适合小规模数据，但不适合大规模数据。每次读写 SharedPreferences 数据都需要将整个 XML 文件加载到内存中，进行修改后再写回磁盘。对于大规模数据，这会导致内存和磁盘的频繁读写操作，降低了存取效率。
+2. 内存占用：将大规模数据存储在 SharedPreferences 中可能导致内存占用增加。当数据量大时，加载整个 XML 文件到内存中可能会占用大量内存，可能导致应用程序性能下降，尤其是在内存有限的设备上。
+3. 文件 I/O 操作：SharedPreferences 操作需要频繁地进行文件读写操作，这会增加磁盘 I/O 的负担。如果频繁读写大规模数据，可能会导致磁盘操作变得缓慢，从而影响应用的响应速度。
+4. 数据一致性：由于 SharedPreferences 是一个 XML 文件，没有提供事务支持。在多线程环境中，如果多个线程同时尝试读写 
 
 SharedPreferences采用xml文件格式来保存数据, 该文件所在目录位于 ``/data/data/<package name>/shared_prefs``，如：
 ```xml
